@@ -38,7 +38,7 @@ class DockingStation
   end
 
   def broken?
-    !bikes[0].working?
+    bikes.count == 1 && !bikes[0].working?
   end
 
 end
