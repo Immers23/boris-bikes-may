@@ -5,11 +5,11 @@ class DockingStation
 
   attr_accessor :capacity
   attr_reader :bikes
+  attr_reader :working_bike
 
   def initialize(capacity=DEFAULT_CAPACITY)
     @bikes = []
     @capacity = capacity
-    @working_bike = []
   end
 
   def dock(bike)
@@ -19,12 +19,11 @@ class DockingStation
 
   def release_working
     fail 'No bikes avaliable' if empty? || broken?
-    bikes.each do |bike|
+    bikes.each_with_index do |bike, index|
       if bike.working?
-        @working_bike.push(bike)
+        return bikes.slice!(index)
       end
     end
-    @working_bike.pop
   end
 
   private
