@@ -3,7 +3,7 @@ require 'bike'
 
 describe DockingStation do
 
-  it { is_expected.to respond_to :release_bike }
+  it { is_expected.to respond_to :release_working }
 
   it { is_expected.to respond_to :bikes }
 
@@ -18,23 +18,40 @@ describe DockingStation do
     expect(subject.bikes). to eq [bike]
   end
 
-  describe '#release_bike' do
+  describe '#release_working' do
     it 'releases a bike' do
       bike = Bike.new
       subject.dock(bike)
-      expect(subject.release_bike).to eq bike
+      expect(subject.release_working).to eq bike
     end
 
     it 'raises an error when docking station to release a bike when empty' do
-      expect { subject.release_bike }.to raise_error 'No bikes avaliable'
+      expect { subject.release_working }.to raise_error 'No bikes avaliable'
     end
 
-    it 'only releases working bikes' do
+    it 'returns only the working bikes when multiple bikes are docked and released' do
+      station = DockingStation.new
+      bike = Bike.new
+      broken_bike = Bike.new
+      bike2 = Bike.new
+      broken_bike2 = Bike.new
+      broken_bike.report_broken
+      broken_bike2.report_broken
+      station.dock(bike)
+      station.dock(broken_bike)
+      station.dock(bike2)
+      station.dock(broken_bike2)
+      station.release_working
+      expect(station.release_working).to eq bike2
+    end
+
+    it 'only releases working bikes when dock contains only broken bikes' do
       bike = Bike.new
       bike.report_broken
       subject.dock(bike)
-      expect { subject.release_bike }.to raise_error 'No bikes avaliable'
+      expect { subject.release_working }.to raise_error 'No bikes avaliable'
     end
+
 
   end
 

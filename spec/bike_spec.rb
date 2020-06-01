@@ -8,5 +8,6 @@ describe Bike do
     subject.report_broken
     expect(subject.working?).to eq(false)
   end
+  
 
 end
